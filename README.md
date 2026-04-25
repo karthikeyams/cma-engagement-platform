@@ -37,7 +37,7 @@ A multi-agent AI system for **Chinmaya Mission Atlanta (CMA)** that automates an
 
 ### Open in GitHub Codespaces (Recommended)
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/karthikeyamalavalli/cma-engagement-platform)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/karthikeyams/cma-engagement-platform)
 
 The Codespace will automatically:
 - Install all npm dependencies
@@ -47,14 +47,19 @@ The Codespace will automatically:
 
 ### Local Development
 
-**1. Clone the repository**
+**1. Use Node 20** (Next.js 14 is not compatible with Node 22+)
 ```bash
-git clone https://github.com/karthikeyamalavalli/cma-engagement-platform.git
+nvm install 20 && nvm use 20
+```
+
+**2. Clone the repository**
+```bash
+git clone https://github.com/karthikeyams/cma-engagement-platform.git
 cd cma-engagement-platform
 npm install
 ```
 
-**2. Fill in environment variables**
+**3. Fill in environment variables**
 
 Copy `.env.local.example` to `.env.local` and fill in each value:
 
@@ -73,17 +78,17 @@ cp .env.local.example .env.local
 | `TWILIO_AUTH_TOKEN` | Same page as above |
 | `TWILIO_WHATSAPP_FROM` | Twilio Console → Messaging → Senders (format: `whatsapp:+1415XXXXXXX`) |
 
-**3. Run the database migration**
+**4. Run the database migration**
 ```bash
 npm run db:migrate
 ```
 
-**4. Seed the database with demo data**
+**5. Seed the database with demo data**
 ```bash
 npm run db:seed
 ```
 
-**5. Start the development server**
+**6. Start the development server**
 ```bash
 npm run dev
 ```
@@ -92,13 +97,22 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## Database Commands
+## npm Scripts
 
 ```bash
-npm run db:migrate   # Apply all migrations (supabase db push)
-npm run db:seed      # Load seed data for demo
-npm run db:reset     # Reset database to clean state
-npm run db:studio    # Open Supabase Studio UI
+# Development
+npm run dev            # Start Next.js dev server (localhost:3000)
+npm run build          # Production build (requires Node 20)
+npm run lint           # ESLint
+
+# Database
+npm run db:migrate     # Apply all migrations  (supabase db push)
+npm run db:seed        # Load seed data for demo
+npm run db:reset       # Reset database to clean state
+npm run db:studio      # Open Supabase Studio UI
+
+# Testing
+npm run test:reminder  # Run Event Reminder Agent end-to-end test
 ```
 
 ---
@@ -106,17 +120,33 @@ npm run db:studio    # Open Supabase Studio UI
 ## Project Structure
 
 ```
-/app                    Next.js App Router pages
-  /dashboard            Main engagement dashboard
-  /api                  API route handlers
+/app
+  /dashboard
+    /events             Event RSVP dashboard (Session 2)
+  /api
+    /agents
+      /remind           POST — trigger event reminders
+      /confirm          POST — handle RSVP confirmations
+    /events
+      /route.ts         GET — events with RSVP counts
+      /[id]/rsvps       GET — RSVPs with member details
+      /[id]/messages    GET — agent message log per event
 /components             Shared UI components
 /lib
-  /agents               One file per AI agent
-  /supabase             Supabase client (browser + server)
-  /types                Shared TypeScript interfaces
-/scripts                Seed scripts and utilities
+  /agents
+    base-agent.ts       Abstract base (Anthropic + Supabase)
+    event-reminder-agent.ts  sendReminder, sendBulkReminders, processConfirmation
+  /supabase
+    client.ts           Browser client (anon key, RLS enforced)
+    server.ts           Server client (service role, cma schema)
+  /types
+    index.ts            All TypeScript interfaces and union types
+/scripts
+  test-reminder-flow.ts End-to-end agent test
 /.devcontainer          GitHub Codespaces configuration
-/supabase/migrations    SQL migration files
+/supabase/migrations
+  001_initial_schema.sql  All tables in cma schema + RLS + indexes
+  002_seed_data.sql       20 members, 4 events, RSVPs, agent messages
 ```
 
 ---
