@@ -20,6 +20,7 @@ export const supabaseAdmin = createClient<Database>(
   supabaseUrl,
   supabaseServiceRoleKey,
   {
+    db: { schema: "cma" },
     auth: {
       autoRefreshToken: false,
       persistSession: false,

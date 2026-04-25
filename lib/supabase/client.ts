@@ -15,4 +15,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
  * Uses the public anon key — subject to Row Level Security policies.
  * Import this in Client Components and browser-side code.
  */
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  db: { schema: "cma" },
+});
