@@ -1,0 +1,37 @@
+{
+  "name": "CMA Engagement Platform",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "bradlc.vscode-tailwindcss",
+        "Prisma.prisma",
+        "GitHub.copilot",
+        "Anthropic.claude-code"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  "portsAttributes": {
+    "3000": {
+      "label": "Next.js App",
+      "onAutoForward": "openBrowser"
+    },
+    "54321": {
+      "label": "Supabase Studio (local)",
+      "onAutoForward": "silent"
+    }
+  },
+
+  "forwardPorts": [3000, 54321]
+}

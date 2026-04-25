@@ -1,36 +1,136 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CMA Member Engagement AI Platform
+
+A multi-agent AI system for **Chinmaya Mission Atlanta (CMA)** that automates and personalizes member communications — event reminders, feedback collection, announcements, volunteer coordination, engagement insights, and member onboarding.
+
+> **Board Demo Milestone: May 2, 2025**
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js 14 (App Router), TypeScript, Tailwind CSS |
+| Database | Supabase (PostgreSQL) |
+| AI Agents | Anthropic Claude API (`claude-sonnet-4-6`) |
+| Email | Resend |
+| WhatsApp/SMS | Twilio |
+| Deployment | Vercel |
+| Charts | Recharts |
+
+---
+
+## AI Agents
+
+| Agent | Purpose |
+|---|---|
+| Event Reminder Agent | Sends personalized reminders and collects RSVP confirmations |
+| Feedback Collection Agent | Gathers post-event ratings and suggestions |
+| Announcement Agent | Broadcasts program announcements across channels |
+| Volunteer Coordination Agent | Matches and recruits seva volunteers |
+| Engagement Insight Agent | Re-engages at-risk and lapsed members |
+| Onboarding Agent | Welcomes and guides new members |
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Open in GitHub Codespaces (Recommended)
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/karthikeyamalavalli/cma-engagement-platform)
+
+The Codespace will automatically:
+- Install all npm dependencies
+- Install the Supabase CLI
+- Create your `.env.local` from `.env.local.example`
+- Print next-step instructions in the terminal
+
+### Local Development
+
+**1. Clone the repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/karthikeyamalavalli/cma-engagement-platform.git
+cd cma-engagement-platform
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**2. Fill in environment variables**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy `.env.local.example` to `.env.local` and fill in each value:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp .env.local.example .env.local
+```
 
-## Learn More
+| Variable | Where to get it |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | [Supabase Dashboard](https://supabase.com/dashboard) → Project Settings → API |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Same page as above |
+| `SUPABASE_SERVICE_ROLE_KEY` | Same page — **never expose this to the browser** |
+| `ANTHROPIC_API_KEY` | [Anthropic Console](https://console.anthropic.com/settings/keys) |
+| `RESEND_API_KEY` | [Resend Dashboard](https://resend.com/api-keys) |
+| `TWILIO_ACCOUNT_SID` | [Twilio Console](https://console.twilio.com) |
+| `TWILIO_AUTH_TOKEN` | Same page as above |
+| `TWILIO_WHATSAPP_FROM` | Twilio Console → Messaging → Senders (format: `whatsapp:+1415XXXXXXX`) |
 
-To learn more about Next.js, take a look at the following resources:
+**3. Run the database migration**
+```bash
+npm run db:migrate
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**4. Seed the database with demo data**
+```bash
+npm run db:seed
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**5. Start the development server**
+```bash
+npm run dev
+```
 
-## Deploy on Vercel
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Database Commands
+
+```bash
+npm run db:migrate   # Apply all migrations (supabase db push)
+npm run db:seed      # Load seed data for demo
+npm run db:reset     # Reset database to clean state
+npm run db:studio    # Open Supabase Studio UI
+```
+
+---
+
+## Project Structure
+
+```
+/app                    Next.js App Router pages
+  /dashboard            Main engagement dashboard
+  /api                  API route handlers
+/components             Shared UI components
+/lib
+  /agents               One file per AI agent
+  /supabase             Supabase client (browser + server)
+  /types                Shared TypeScript interfaces
+/scripts                Seed scripts and utilities
+/.devcontainer          GitHub Codespaces configuration
+/supabase/migrations    SQL migration files
+```
+
+---
+
+## Supabase Dashboard
+
+[https://supabase.com/dashboard](https://supabase.com/dashboard)
+
+---
+
+## Deployment
+
+This project is deployed on [Vercel](https://vercel.com). Connect your GitHub repo to Vercel and add the environment variables from `.env.local.example` in the Vercel project settings.
+
+---
+
+*Built for Chinmaya Mission Atlanta — Hari Om!*
