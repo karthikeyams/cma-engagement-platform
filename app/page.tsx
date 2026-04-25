@@ -114,14 +114,7 @@ export default function HomePage() {
               <a
                 key={item}
                 href="#"
-                className="transition-colors"
-                style={{ color: "#E3D6D3" }}
-                onMouseOver={(e) =>
-                  ((e.target as HTMLElement).style.color = "#F7F2F0")
-                }
-                onMouseOut={(e) =>
-                  ((e.target as HTMLElement).style.color = "#E3D6D3")
-                }
+                className="text-cma-border hover:text-cma-beige transition-colors"
               >
                 {item}
               </a>
