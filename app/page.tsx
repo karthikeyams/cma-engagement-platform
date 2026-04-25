@@ -1,100 +1,445 @@
-import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+// ─── Colour tokens matching cmgurukul.org ────────────────────
+// Primary dark brown : #240C00
+// Warm taupe         : #7C6D66
+// Beige background   : #F7F2F0
+// Border             : #E3D6D3
+// Muted text         : #988f8a
+
+const upcomingEvents = [
+  {
+    title: "Gita Jnana Yajna — Chapter 12",
+    type: "Satsang",
+    date: "May 1–5, 2025",
+    time: "6:30 PM daily",
+    location: "CMA Ashram, Roswell GA",
+    description:
+      "A five-day intensive exposition of Bhagavad Gita Chapter 12 (Bhakti Yoga) by Swami Swaroopananda. Open to all seekers.",
+  },
+  {
+    title: "Devi Bhava Celebration",
+    type: "Cultural",
+    date: "May 8, 2025",
+    time: "5:00 PM",
+    location: "CMA Ashram — Main Hall",
+    description:
+      "An evening of devotional music, Devi puja, and cultural performances celebrating the Divine Mother.",
+  },
+  {
+    title: "Bala Vihar Spring Session",
+    type: "Youth",
+    date: "April 27, 2025",
+    time: "10:00 AM",
+    location: "CMA Ashram — Bala Vihar Hall",
+    description:
+      "Monthly session for children ages 6–16. Chanting, scriptural stories, and craft activities.",
+  },
+];
+
+const programs = [
+  {
+    icon: "🕉️",
+    title: "Vedanta Classes",
+    description:
+      "Weekly study of foundational Vedanta texts including Vivekachudamani and the Upanishads, guided by trained acharyas.",
+  },
+  {
+    icon: "📖",
+    title: "Gita Study",
+    description:
+      "Systematic study of the Bhagavad Gita — one of the most profound spiritual texts ever written.",
+  },
+  {
+    icon: "👧",
+    title: "Bala Vihar",
+    description:
+      "A joyful spiritual education program for children and youth, rooted in Indian culture and values.",
+  },
+  {
+    icon: "🙏",
+    title: "Satsang",
+    description:
+      "Sunday satsangs combining bhajans, meditation, and spiritual discourse in a warm community setting.",
+  },
+  {
+    icon: "🌸",
+    title: "Devi Bhava",
+    description:
+      "Seasonal celebrations honoring the Divine Mother through puja, music, and cultural programs.",
+  },
+  {
+    icon: "🤝",
+    title: "Seva",
+    description:
+      "Volunteer service opportunities that embody karma yoga — selfless action as a spiritual practice.",
+  },
+];
+
+const stats = [
+  { value: "500+", label: "Active Members" },
+  { value: "20+", label: "Years of Service" },
+  { value: "6", label: "AI Agents" },
+  { value: "4", label: "Upcoming Events" },
+];
+
+export default function HomePage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div
+      className="min-h-screen"
+      style={{ backgroundColor: "#F7F2F0", fontFamily: "Georgia, 'Times New Roman', serif" }}
+    >
+      {/* ── Navigation ─────────────────────────────────────── */}
+      <header style={{ backgroundColor: "#240C00" }}>
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <span className="text-3xl">ॐ</span>
+            <div>
+              <div
+                className="text-lg font-bold leading-tight"
+                style={{ color: "#F7F2F0", letterSpacing: "0.02em" }}
+              >
+                Chinmaya Mission Atlanta
+              </div>
+              <div className="text-xs" style={{ color: "#988f8a" }}>
+                Member Engagement Platform
+              </div>
+            </div>
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          {/* Nav links */}
+          <nav className="hidden md:flex items-center gap-6 text-sm">
+            {["About", "Programs", "Events", "Seva", "Contact"].map((item) => (
+              <a
+                key={item}
+                href="#"
+                className="transition-colors"
+                style={{ color: "#E3D6D3" }}
+                onMouseOver={(e) =>
+                  ((e.target as HTMLElement).style.color = "#F7F2F0")
+                }
+                onMouseOut={(e) =>
+                  ((e.target as HTMLElement).style.color = "#E3D6D3")
+                }
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
+
+          {/* CTA */}
+          <Link
+            href="/dashboard/events"
+            className="hidden md:inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-opacity hover:opacity-90"
+            style={{ backgroundColor: "#7C6D66", color: "#F7F2F0" }}
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            Staff Dashboard →
+          </Link>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      </header>
+
+      {/* ── Hero ───────────────────────────────────────────── */}
+      <section
+        className="relative overflow-hidden"
+        style={{ backgroundColor: "#240C00", minHeight: "520px" }}
+      >
+        {/* Decorative Sanskrit pattern overlay */}
+        <div
+          className="absolute inset-0 opacity-5 text-center"
+          style={{
+            fontSize: "12rem",
+            color: "#F7F2F0",
+            lineHeight: 1,
+            paddingTop: "2rem",
+            userSelect: "none",
+          }}
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+          ॐ
+        </div>
+
+        <div className="relative max-w-6xl mx-auto px-6 py-20 flex flex-col md:flex-row items-center gap-12">
+          {/* Hero text */}
+          <div className="flex-1 text-center md:text-left">
+            <div
+              className="inline-block rounded-full px-4 py-1.5 text-xs font-medium mb-6 tracking-widest uppercase"
+              style={{ backgroundColor: "rgba(124,109,102,0.3)", color: "#E3D6D3" }}
+            >
+              Chinmaya Mission Atlanta
+            </div>
+            <h1
+              className="font-bold leading-tight mb-6"
+              style={{
+                color: "#F7F2F0",
+                fontSize: "clamp(2rem, 4vw, 3rem)",
+              }}
+            >
+              Connecting Our
+              <br />
+              <span style={{ color: "#C8A882" }}>Spiritual Community</span>
+              <br />
+              Through AI
+            </h1>
+            <p
+              className="text-base leading-relaxed mb-8 max-w-lg"
+              style={{ color: "#988f8a" }}
+            >
+              Personalized event reminders, RSVP management, volunteer
+              coordination, and member engagement — powered by intelligent agents
+              built on the timeless values of Chinmaya Mission.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+              <Link
+                href="/dashboard/events"
+                className="inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "#F7F2F0", color: "#240C00" }}
+              >
+                Open Dashboard
+              </Link>
+              <a
+                href="#programs"
+                className="inline-flex items-center justify-center rounded-full border px-8 py-3 text-sm font-medium transition-colors"
+                style={{ borderColor: "#7C6D66", color: "#E3D6D3" }}
+              >
+                Our Programs
+              </a>
+            </div>
+          </div>
+
+          {/* Stats card */}
+          <div
+            className="rounded-2xl p-8 grid grid-cols-2 gap-6 min-w-64"
+            style={{ backgroundColor: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)" }}
+          >
+            {stats.map((s) => (
+              <div key={s.label} className="text-center">
+                <div
+                  className="text-3xl font-bold mb-1"
+                  style={{ color: "#C8A882" }}
+                >
+                  {s.value}
+                </div>
+                <div className="text-xs" style={{ color: "#988f8a" }}>
+                  {s.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Upcoming Events ────────────────────────────────── */}
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <div className="flex items-center justify-between mb-10">
+          <div>
+            <h2
+              className="text-2xl font-bold mb-1"
+              style={{ color: "#240C00" }}
+            >
+              Upcoming Events
+            </h2>
+            <div
+              className="h-0.5 w-12 rounded"
+              style={{ backgroundColor: "#7C6D66" }}
+            />
+          </div>
+          <Link
+            href="/dashboard/events"
+            className="text-sm font-medium transition-opacity hover:opacity-70"
+            style={{ color: "#7C6D66" }}
+          >
+            Manage all events →
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {upcomingEvents.map((event) => (
+            <div
+              key={event.title}
+              className="rounded-xl overflow-hidden transition-shadow hover:shadow-lg"
+              style={{
+                backgroundColor: "#fff",
+                border: "1px solid #E3D6D3",
+              }}
+            >
+              {/* Colour band by type */}
+              <div
+                className="h-1.5"
+                style={{
+                  backgroundColor:
+                    event.type === "Satsang"
+                      ? "#C8A882"
+                      : event.type === "Cultural"
+                      ? "#E08080"
+                      : "#7CB8A8",
+                }}
+              />
+              <div className="p-6">
+                <span
+                  className="inline-block rounded-full px-3 py-0.5 text-xs font-medium mb-3"
+                  style={{ backgroundColor: "#F7F2F0", color: "#7C6D66" }}
+                >
+                  {event.type}
+                </span>
+                <h3
+                  className="text-base font-semibold leading-snug mb-2"
+                  style={{ color: "#240C00" }}
+                >
+                  {event.title}
+                </h3>
+                <p
+                  className="text-xs leading-relaxed mb-4"
+                  style={{ color: "#988f8a" }}
+                >
+                  {event.description}
+                </p>
+                <div
+                  className="space-y-1 text-xs pt-4"
+                  style={{
+                    borderTop: "1px solid #E3D6D3",
+                    color: "#7C6D66",
+                  }}
+                >
+                  <div className="flex items-center gap-2">
+                    <span>📅</span> {event.date} · {event.time}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>📍</span> {event.location}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Divider ────────────────────────────────────────── */}
+      <div
+        className="max-w-6xl mx-auto px-6"
+        style={{ borderTop: "1px solid #E3D6D3" }}
+      />
+
+      {/* ── Programs ───────────────────────────────────────── */}
+      <section id="programs" className="max-w-6xl mx-auto px-6 py-16">
+        <div className="text-center mb-12">
+          <h2
+            className="text-2xl font-bold mb-2"
+            style={{ color: "#240C00" }}
+          >
+            Our Programs
+          </h2>
+          <div
+            className="h-0.5 w-12 rounded mx-auto mb-4"
+            style={{ backgroundColor: "#7C6D66" }}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <p className="text-sm max-w-xl mx-auto" style={{ color: "#988f8a" }}>
+            Rooted in Vedanta, Chinmaya Mission Atlanta offers a range of
+            programs for all ages — from young children to seasoned seekers.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+          {programs.map((p) => (
+            <div
+              key={p.title}
+              className="rounded-xl p-6 transition-shadow hover:shadow-md"
+              style={{
+                backgroundColor: "#fff",
+                border: "1px solid #E3D6D3",
+              }}
+            >
+              <div className="text-3xl mb-3">{p.icon}</div>
+              <h3
+                className="text-sm font-semibold mb-2"
+                style={{ color: "#240C00" }}
+              >
+                {p.title}
+              </h3>
+              <p className="text-xs leading-relaxed" style={{ color: "#988f8a" }}>
+                {p.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── AI Platform Banner ─────────────────────────────── */}
+      <section style={{ backgroundColor: "#240C00" }}>
+        <div className="max-w-6xl mx-auto px-6 py-14 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div>
+            <h2
+              className="text-xl font-bold mb-2"
+              style={{ color: "#F7F2F0" }}
+            >
+              Member Engagement Platform
+            </h2>
+            <p className="text-sm max-w-lg" style={{ color: "#988f8a" }}>
+              Six AI agents working together to send personalized reminders,
+              collect feedback, coordinate volunteers, onboard new members, and
+              re-engage at-risk members — all from one dashboard.
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+            <Link
+              href="/dashboard/events"
+              className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#F7F2F0", color: "#240C00" }}
+            >
+              Event Dashboard
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Footer ─────────────────────────────────────────── */}
+      <footer style={{ backgroundColor: "#1a0900", color: "#988f8a" }}>
+        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <span className="text-2xl" style={{ color: "#C8A882" }}>ॐ</span>
+            <div>
+              <div className="text-sm font-semibold" style={{ color: "#E3D6D3" }}>
+                Chinmaya Mission Atlanta
+              </div>
+              <div className="text-xs">1475 Hembree Rd, Roswell, GA 30076</div>
+            </div>
+          </div>
+
+          {/* Links */}
+          <div className="flex gap-6 text-xs">
+            {["About", "Programs", "Events", "Seva", "Contact"].map((item) => (
+              <a
+                key={item}
+                href="#"
+                className="transition-colors hover:text-white"
+                style={{ color: "#7C6D66" }}
+              >
+                {item}
+              </a>
+            ))}
+          </div>
+
+          {/* Social */}
+          <div className="flex gap-4 text-lg">
+            {["f", "▶", "in"].map((icon) => (
+              <a
+                key={icon}
+                href="#"
+                className="transition-colors hover:text-white text-xs font-bold"
+                style={{ color: "#7C6D66" }}
+              >
+                {icon}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div
+          className="text-center text-xs py-4"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.05)", color: "#4a3f3a" }}
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+          © 2025 Chinmaya Mission Atlanta · Built with seva and AI · Hari Om
+        </div>
       </footer>
     </div>
   );
