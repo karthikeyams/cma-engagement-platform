@@ -121,14 +121,23 @@ export default function HomePage() {
             ))}
           </nav>
 
-          {/* CTA */}
-          <Link
-            href="/dashboard/events"
-            className="hidden md:inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-opacity hover:opacity-90"
-            style={{ backgroundColor: "#7C6D66", color: "#F7F2F0" }}
-          >
-            Staff Dashboard →
-          </Link>
+          {/* CTA buttons */}
+          <div className="hidden md:flex items-center gap-3">
+            <Link
+              href="/portal/registration"
+              className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#C8A882", color: "#240C00" }}
+            >
+              Portal Demo →
+            </Link>
+            <Link
+              href="/dashboard/events"
+              className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#7C6D66", color: "#F7F2F0" }}
+            >
+              Staff Dashboard →
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -188,6 +197,13 @@ export default function HomePage() {
                 style={{ backgroundColor: "#F7F2F0", color: "#240C00" }}
               >
                 Open Dashboard
+              </Link>
+              <Link
+                href="/portal/registration"
+                className="inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "#C8A882", color: "#240C00" }}
+              >
+                Portal Demo →
               </Link>
               <a
                 href="#programs"
@@ -373,6 +389,13 @@ export default function HomePage() {
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+            <Link
+              href="/portal/registration"
+              className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#C8A882", color: "#240C00" }}
+            >
+              Portal Demo
+            </Link>
             <Link
               href="/dashboard/events"
               className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"

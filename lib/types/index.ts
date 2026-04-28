@@ -224,3 +224,31 @@ export interface EventWithRSVPCount extends Event {
   rsvp_count: number;
   confirmed_count: number;
 }
+
+// ─── ZEFFY PORTAL TYPES ───────────────────────────────────────
+
+export type PortalRegistrationStatus = "Pending" | "Complete";
+
+export interface PortalRegistration {
+  id: string;
+  name: string;
+  email: string;
+  membership_type: string;
+  status: PortalRegistrationStatus;
+  payment_confirmed_at: string | null;
+  transaction_id: string | null;
+  created_at: string;
+}
+
+export interface PortalRegistrationInsert {
+  name: string;
+  email: string;
+  membership_type: string;
+  status: PortalRegistrationStatus;
+}
+
+export interface PortalRegistrationUpdate {
+  status?: PortalRegistrationStatus;
+  payment_confirmed_at?: string | null;
+  transaction_id?: string | null;
+}
