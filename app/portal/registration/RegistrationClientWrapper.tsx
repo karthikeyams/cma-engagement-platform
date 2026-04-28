@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { PortalRegistration } from "@/lib/types";
 import ZeffyPaymentEmbed from "@/components/ZeffyPaymentEmbed";
+import WebhookEventLog from "@/components/WebhookEventLog";
 
 interface Props {
   member: PortalRegistration;
@@ -13,24 +14,35 @@ export default function RegistrationClientWrapper({ member }: Props) {
   const [isComplete, setIsComplete] = useState(member.status === "Complete");
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "24px", alignItems: "start" }}>
-      {/* Left panel — member info */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-        <MemberInfoPanel member={member} isComplete={isComplete} />
-        <ProductionCallout />
+    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "24px", alignItems: "start" }}>
+        {/* Left panel — member info */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          <MemberInfoPanel member={member} isComplete={isComplete} />
+          <ProductionCallout />
+        </div>
+
+        {/* Right panel — payment or success */}
+        <div>
+          {isComplete ? (
+            <PaymentSuccessPanel member={member} />
+          ) : (
+            <ZeffyPaymentEmbed
+              memberEmail={member.email}
+              memberName={member.name}
+              onPaymentComplete={() => setIsComplete(true)}
+            />
+          )}
+        </div>
       </div>
 
-      {/* Right panel — payment or success */}
+      {/* Webhook Event Log — full width below */}
       <div>
-        {isComplete ? (
-          <PaymentSuccessPanel member={member} />
-        ) : (
-          <ZeffyPaymentEmbed
-            memberEmail={member.email}
-            memberName={member.name}
-            onPaymentComplete={() => setIsComplete(true)}
-          />
-        )}
+        <div style={{ marginBottom: "10px", display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ fontSize: "13px", fontWeight: 600, color: "#240C00" }}>Webhook Event Log</span>
+          <span style={{ fontSize: "12px", color: "#988f8a" }}>— live view of /api/zeffy-webhook calls</span>
+        </div>
+        <WebhookEventLog />
       </div>
     </div>
   );

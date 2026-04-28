@@ -19,6 +19,7 @@ export default function ZeffyPaymentEmbed({
   onPaymentComplete,
 }: ZeffyPaymentEmbedProps) {
   const [iframeLoaded, setIframeLoaded] = useState(false);
+  const [iframeError, setIframeError] = useState(false);
   const [isPolling, setIsPolling] = useState(false);
   const [simulateLoading, setSimulateLoading] = useState(false);
 
@@ -144,7 +145,7 @@ export default function ZeffyPaymentEmbed({
 
       {/* iframe */}
       <div style={{ position: "relative", backgroundColor: "#F7F2F0" }}>
-        {!iframeLoaded && (
+        {!iframeLoaded && !iframeError && (
           <div
             style={{
               position: "absolute",
@@ -160,20 +161,59 @@ export default function ZeffyPaymentEmbed({
             Loading payment form...
           </div>
         )}
-        <iframe
-          src={`https://www.zeffy.com/en-US/embed/membership/${ZEFFY_FORM_ID}`}
-          width="100%"
-          height="600"
-          allow="payment"
-          title="Zeffy Membership Payment"
-          onLoad={() => setIframeLoaded(true)}
-          style={{
-            border: "none",
-            display: "block",
-            opacity: iframeLoaded ? 1 : 0,
-            transition: "opacity 0.4s ease",
-          }}
-        />
+
+        {iframeError ? (
+          <div
+            style={{
+              padding: "40px 32px",
+              textAlign: "center",
+              backgroundColor: "#FEF9EC",
+              borderTop: "1px solid #FDE68A",
+              borderBottom: "1px solid #FDE68A",
+            }}
+          >
+            <div style={{ fontSize: "32px", marginBottom: "12px" }}>🔒</div>
+            <div style={{ color: "#92400E", fontSize: "14px", fontWeight: 600, marginBottom: "8px" }}>
+              Zeffy form not yet embeddable
+            </div>
+            <div style={{ color: "#7C6D66", fontSize: "12px", lineHeight: "1.6", maxWidth: "340px", margin: "0 auto 16px" }}>
+              Zeffy requires a connected bank account before the embed URL goes live.
+              Connect your bank in the Zeffy dashboard to enable the live iframe.
+            </div>
+            <div
+              style={{
+                backgroundColor: "#F7F2F0",
+                border: "1px solid #E3D6D3",
+                borderRadius: "8px",
+                padding: "10px 16px",
+                fontSize: "11px",
+                color: "#7C6D66",
+                display: "inline-block",
+              }}
+            >
+              Form ID: <code style={{ color: "#240C00" }}>{ZEFFY_FORM_ID}</code>
+            </div>
+            <div style={{ marginTop: "16px", fontSize: "12px", color: "#7C6D66" }}>
+              Use the <strong>"Simulate Zeffy Payment"</strong> button below to demo the full flow ↓
+            </div>
+          </div>
+        ) : (
+          <iframe
+            src={`https://www.zeffy.com/en-US/embed/membership/${ZEFFY_FORM_ID}`}
+            width="100%"
+            height="600"
+            allow="payment"
+            title="Zeffy Membership Payment"
+            onLoad={() => setIframeLoaded(true)}
+            onError={() => setIframeError(true)}
+            style={{
+              border: "none",
+              display: "block",
+              opacity: iframeLoaded ? 1 : 0,
+              transition: "opacity 0.4s ease",
+            }}
+          />
+        )}
       </div>
 
       {/* Footer */}

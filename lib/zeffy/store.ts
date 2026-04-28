@@ -12,6 +12,34 @@ import type {
 } from "@/lib/types";
 import { SEED_MEMBERS } from "./seed";
 
+// ─── Webhook Event Log (in-memory, per process) ──────────────
+export interface WebhookLogEntry {
+  id: string;
+  received_at: string;
+  payload: Record<string, unknown>;
+  email: string | null;
+  result: "skipped" | "updated" | "not_found" | "error";
+  reason?: string;
+  transaction_id?: string;
+  steps: string[];
+}
+
+const MAX_LOG_ENTRIES = 20;
+const webhookLog: WebhookLogEntry[] = [];
+
+export function appendWebhookLog(entry: WebhookLogEntry): void {
+  webhookLog.unshift(entry); // newest first
+  if (webhookLog.length > MAX_LOG_ENTRIES) webhookLog.pop();
+}
+
+export function getWebhookLog(): WebhookLogEntry[] {
+  return webhookLog;
+}
+
+export function clearWebhookLog(): void {
+  webhookLog.length = 0;
+}
+
 // ─── In-memory fallback (used when DB table is unavailable) ──
 let inMemoryStore: PortalRegistration[] | null = null;
 
