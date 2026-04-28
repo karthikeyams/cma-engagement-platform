@@ -82,13 +82,6 @@ function MemberSelector() {
                 borderRadius: "12px",
                 padding: "24px",
                 cursor: "pointer",
-                transition: "box-shadow 0.2s ease",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 16px rgba(36,12,0,0.1)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLDivElement).style.boxShadow = "none";
               }}
             >
               <div
