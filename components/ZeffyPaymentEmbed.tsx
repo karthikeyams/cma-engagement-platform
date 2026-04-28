@@ -85,6 +85,9 @@ export default function ZeffyPaymentEmbed({
     function handleMessage(event: MessageEvent) {
       if (!event.origin.includes("zeffy.com")) return;
 
+      // Log ALL messages from Zeffy so we can see the exact payload on payment
+      console.log("[zeffy-postMessage]", JSON.stringify(event.data));
+
       // Zeffy signals org dashboard not connected via various message shapes
       const data = event.data as Record<string, unknown> | null;
       if (
