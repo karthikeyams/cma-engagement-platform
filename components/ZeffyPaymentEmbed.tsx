@@ -100,14 +100,29 @@ export default function ZeffyPaymentEmbed({
         return;
       }
 
-      // Real Zeffy payment completion signal (confirmed from postMessage logs)
+      // Real Zeffy payment completion signal (confirmed from postMessage logs).
+      // Fire webhook using memberEmail (prop) so the event log gets an entry,
+      // then flip the UI. The calculateSubFramePositioning branch below may
+      // also fire with the payer email from the thank-you URL, but this fires first.
       if (data?.type === "zeffy-embed:thank-you-animation-shown") {
         iframeHealthyRef.current = true;
-        stopPolling();
-        onPaymentComplete();
+        fetch("/api/zeffy-webhook", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            order_status: "paid",
+            order: { email: memberEmail },
+            transaction_id: `zeffy_real_${Date.now()}`,
+          }),
+        })
+          .then(() => { stopPolling(); onPaymentComplete(); })
+          .catch(() => { stopPolling(); onPaymentComplete(); });
+        return;
       }
 
-      // Extract email from calculateSubFramePositioning thank-you URL and fire webhook
+      // calculateSubFramePositioning carries the thank-you URL with the payer's
+      // email in the query string — use it to re-confirm if thank-you-animation
+      // didn't fire (belt + suspenders).
       if (
         typeof data?.command === "string" &&
         data.command === "calculateSubFramePositioning" &&
@@ -117,22 +132,18 @@ export default function ZeffyPaymentEmbed({
         try {
           const url = new URL(subFrameData.url);
           if (url.pathname.includes("thank-you")) {
-            const emailFromUrl = url.searchParams.get("email");
-            if (emailFromUrl) {
-              // Fire webhook to mark registration complete
-              fetch("/api/zeffy-webhook", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  order_status: "paid",
-                  order: { email: emailFromUrl },
-                  transaction_id: `zeffy_real_${Date.now()}`,
-                }),
-              }).catch(() => { /* silent */ });
-              iframeHealthyRef.current = true;
-              stopPolling();
-              onPaymentComplete();
-            }
+            const emailFromUrl = url.searchParams.get("email") ?? memberEmail;
+            fetch("/api/zeffy-webhook", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                order_status: "paid",
+                order: { email: emailFromUrl },
+                transaction_id: `zeffy_real_url_${Date.now()}`,
+              }),
+            })
+              .then(() => { iframeHealthyRef.current = true; stopPolling(); onPaymentComplete(); })
+              .catch(() => { iframeHealthyRef.current = true; stopPolling(); onPaymentComplete(); });
           }
         } catch { /* silent — URL parse failed */ }
       }
@@ -142,7 +153,7 @@ export default function ZeffyPaymentEmbed({
     }
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, [onPaymentComplete, stopPolling]);
+  }, [memberEmail, onPaymentComplete, stopPolling]);
 
   // Health check: after onLoad + 6s, if no postMessage from Zeffy yet → show error
   function handleIframeLoad() {
