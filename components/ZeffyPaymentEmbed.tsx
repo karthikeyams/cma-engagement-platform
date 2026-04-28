@@ -100,10 +100,41 @@ export default function ZeffyPaymentEmbed({
         return;
       }
 
-      if (data?.type === "payment_complete") {
+      // Real Zeffy payment completion signal (confirmed from postMessage logs)
+      if (data?.type === "zeffy-embed:thank-you-animation-shown") {
         iframeHealthyRef.current = true;
         stopPolling();
         onPaymentComplete();
+      }
+
+      // Extract email from calculateSubFramePositioning thank-you URL and fire webhook
+      if (
+        typeof data?.command === "string" &&
+        data.command === "calculateSubFramePositioning" &&
+        typeof (data as Record<string, unknown> & { subFrameData?: { url?: string } })?.subFrameData?.url === "string"
+      ) {
+        const subFrameData = (data as { subFrameData: { url: string } }).subFrameData;
+        try {
+          const url = new URL(subFrameData.url);
+          if (url.pathname.includes("thank-you")) {
+            const emailFromUrl = url.searchParams.get("email");
+            if (emailFromUrl) {
+              // Fire webhook to mark registration complete
+              fetch("/api/zeffy-webhook", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  order_status: "paid",
+                  order: { email: emailFromUrl },
+                  transaction_id: `zeffy_real_${Date.now()}`,
+                }),
+              }).catch(() => { /* silent */ });
+              iframeHealthyRef.current = true;
+              stopPolling();
+              onPaymentComplete();
+            }
+          }
+        } catch { /* silent — URL parse failed */ }
       }
 
       // Any message from zeffy.com means the iframe is alive and healthy
