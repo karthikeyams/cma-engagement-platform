@@ -119,7 +119,7 @@ export default function HomePage() {
                 className="text-lg font-bold leading-tight"
                 style={{ color: "#F7F2F0", letterSpacing: "0.02em" }}
               >
-                Chinmaya Mission Atlanta
+                Chinmaya Mission Alpharetta
               </div>
               <div className="text-xs" style={{ color: "#988f8a" }}>
                 Member Engagement Platform
@@ -155,7 +155,7 @@ export default function HomePage() {
                 className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-opacity hover:opacity-90"
                 style={{ backgroundColor: "#C8A882", color: "#240C00" }}
               >
-                Portal Demo →
+                Registration Demo →
               </Link>
             )}
             {showEngagement(mode) && (
@@ -197,7 +197,7 @@ export default function HomePage() {
               className="inline-block rounded-full px-4 py-1.5 text-xs font-medium mb-6 tracking-widest uppercase"
               style={{ backgroundColor: "rgba(124,109,102,0.3)", color: "#E3D6D3" }}
             >
-              Chinmaya Mission Atlanta
+              Chinmaya Mission Alpharetta
             </div>
             <h1
               className="font-bold leading-tight mb-6"
@@ -234,7 +234,8 @@ export default function HomePage() {
                   className="inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
                   style={{ backgroundColor: "#C8A882", color: "#240C00" }}
                 >
-                  Portal Demo →
+                  Registration Demo →
+                  <span className="ml-1 text-xs opacity-70">powered by Zeffy</span>
                 </Link>
               )}
               <Link
@@ -383,7 +384,7 @@ export default function HomePage() {
             style={{ backgroundColor: "#7C6D66" }}
           />
           <p className="text-sm max-w-xl mx-auto" style={{ color: "#988f8a" }}>
-            Rooted in Vedanta, Chinmaya Mission Atlanta offers a range of
+            Rooted in Vedanta, Chinmaya Mission Alpharetta offers a range of
             programs for all ages — from young children to seasoned seekers.
           </p>
         </div>
@@ -437,7 +438,8 @@ export default function HomePage() {
                   className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
                   style={{ backgroundColor: "#C8A882", color: "#240C00" }}
                 >
-                  Portal Demo
+                  Registration Demo
+                  <span className="ml-1 text-xs opacity-70">powered by Zeffy</span>
                 </Link>
               )}
               <Link
@@ -480,7 +482,8 @@ export default function HomePage() {
                 className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
                 style={{ backgroundColor: "#C8A882", color: "#240C00" }}
               >
-                Try Portal Demo
+                Registration Demo
+                <span className="ml-1 text-xs opacity-70">powered by Zeffy</span>
               </Link>
               <Link
                 href="/portal/dashboard"
@@ -509,7 +512,7 @@ export default function HomePage() {
             <span className="text-2xl" style={{ color: "#C8A882" }}>ॐ</span>
             <div>
               <div className="text-sm font-semibold" style={{ color: "#E3D6D3" }}>
-                Chinmaya Mission Atlanta
+                Chinmaya Mission Alpharetta
               </div>
               <div className="text-xs">1475 Hembree Rd, Roswell, GA 30076</div>
             </div>
@@ -548,7 +551,7 @@ export default function HomePage() {
           className="text-center text-xs py-4"
           style={{ borderTop: "1px solid rgba(255,255,255,0.05)", color: "#4a3f3a" }}
         >
-          © 2025 Chinmaya Mission Atlanta · Built with seva and AI · Hari Om
+          © 2025 Chinmaya Mission Alpharetta · Built with seva and AI · Hari Om
         </div>
       </footer>
     </div>
