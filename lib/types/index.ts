@@ -142,6 +142,69 @@ export interface SevaCommitment {
 // ─── DATABASE TYPE MAP (for Supabase client typing) ──────────
 
 export interface Database {
+  cma: {
+    Tables: {
+      members: {
+        Row: Member;
+        Insert: Omit<Member, "id" | "created_at" | "joined_at" | "last_active_at"> & {
+          id?: string;
+          joined_at?: string;
+          last_active_at?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<Member, "id">>;
+      };
+      events: {
+        Row: Event;
+        Insert: Omit<Event, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<Event, "id">>;
+      };
+      rsvps: {
+        Row: RSVP;
+        Insert: Omit<RSVP, "id" | "registered_at" | "updated_at"> & {
+          id?: string;
+          registered_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<RSVP, "id">>;
+      };
+      feedback: {
+        Row: Feedback;
+        Insert: Omit<Feedback, "id" | "submitted_at"> & {
+          id?: string;
+          submitted_at?: string;
+        };
+        Update: Partial<Omit<Feedback, "id">>;
+      };
+      agent_messages: {
+        Row: AgentMessage;
+        Insert: Omit<AgentMessage, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<AgentMessage, "id">>;
+      };
+      seva_opportunities: {
+        Row: SevaOpportunity;
+        Insert: Omit<SevaOpportunity, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<SevaOpportunity, "id">>;
+      };
+      seva_commitments: {
+        Row: SevaCommitment;
+        Insert: Omit<SevaCommitment, "id" | "created_at"> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<SevaCommitment, "id">>;
+      };
+    };
+  };
   public: {
     Tables: {
       members: {

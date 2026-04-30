@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getFeatureMode, showEngagement, showRegistration } from "@/lib/config";
 
 // ─── Colour tokens matching cmgurukul.org ────────────────────
 // Primary dark brown : #240C00
@@ -76,7 +77,7 @@ const programs = [
   },
 ];
 
-const stats = [
+const allStats = [
   { value: "500+", label: "Active Members" },
   { value: "20+", label: "Years of Service" },
   { value: "6", label: "AI Agents" },
@@ -84,6 +85,24 @@ const stats = [
 ];
 
 export default function HomePage() {
+  const mode = getFeatureMode();
+
+  const stats = mode === "registration"
+    ? allStats.filter((s) => s.label !== "AI Agents")
+    : allStats;
+
+  const heroTitle =
+    mode === "engagement"
+      ? { line1: "AI-Powered", highlight: "Member Engagement", line2: "for Spiritual Communities" }
+      : mode === "registration"
+      ? { line1: "Seamless", highlight: "Event Registration", line2: "for Spiritual Communities" }
+      : { line1: "Connecting Our", highlight: "Spiritual Community", line2: "Through AI" };
+
+  const heroSubtitle =
+    mode === "registration"
+      ? "Seamless Zeffy-powered membership payment integrated directly into Salesforce Experience Cloud, with real-time webhook confirmation and automatic status tracking."
+      : "Personalized event reminders, RSVP management, volunteer coordination, and member engagement — powered by intelligent agents built on the timeless values of Chinmaya Mission.";
+
   return (
     <div
       className="min-h-screen"
@@ -119,24 +138,35 @@ export default function HomePage() {
                 {item}
               </a>
             ))}
+            <Link
+              href="/architecture"
+              className="transition-colors hover:opacity-80"
+              style={{ color: "#C8A882" }}
+            >
+              Architecture
+            </Link>
           </nav>
 
           {/* CTA buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <Link
-              href="/portal/registration"
-              className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#C8A882", color: "#240C00" }}
-            >
-              Portal Demo →
-            </Link>
-            <Link
-              href="/dashboard/events"
-              className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#7C6D66", color: "#F7F2F0" }}
-            >
-              Staff Dashboard →
-            </Link>
+            {showRegistration(mode) && (
+              <Link
+                href="/portal/registration"
+                className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "#C8A882", color: "#240C00" }}
+              >
+                Portal Demo →
+              </Link>
+            )}
+            {showEngagement(mode) && (
+              <Link
+                href="/dashboard/events"
+                className="inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "#7C6D66", color: "#F7F2F0" }}
+              >
+                Staff Dashboard →
+              </Link>
+            )}
           </div>
         </div>
       </header>
@@ -176,34 +206,43 @@ export default function HomePage() {
                 fontSize: "clamp(2rem, 4vw, 3rem)",
               }}
             >
-              Connecting Our
+              {heroTitle.line1}
               <br />
-              <span style={{ color: "#C8A882" }}>Spiritual Community</span>
+              <span style={{ color: "#C8A882" }}>{heroTitle.highlight}</span>
               <br />
-              Through AI
+              {heroTitle.line2}
             </h1>
             <p
               className="text-base leading-relaxed mb-8 max-w-lg"
               style={{ color: "#988f8a" }}
             >
-              Personalized event reminders, RSVP management, volunteer
-              coordination, and member engagement — powered by intelligent agents
-              built on the timeless values of Chinmaya Mission.
+              {heroSubtitle}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+              {showEngagement(mode) && (
+                <Link
+                  href="/dashboard/events"
+                  className="inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: "#F7F2F0", color: "#240C00" }}
+                >
+                  Open Dashboard
+                </Link>
+              )}
+              {showRegistration(mode) && (
+                <Link
+                  href="/portal/registration"
+                  className="inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: "#C8A882", color: "#240C00" }}
+                >
+                  Portal Demo →
+                </Link>
+              )}
               <Link
-                href="/dashboard/events"
-                className="inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
-                style={{ backgroundColor: "#F7F2F0", color: "#240C00" }}
+                href="/architecture"
+                className="inline-flex items-center justify-center rounded-full border px-8 py-3 text-sm font-medium transition-colors"
+                style={{ borderColor: "#7C6D66", color: "#E3D6D3" }}
               >
-                Open Dashboard
-              </Link>
-              <Link
-                href="/portal/registration"
-                className="inline-flex items-center justify-center rounded-full px-8 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
-                style={{ backgroundColor: "#C8A882", color: "#240C00" }}
-              >
-                Portal Demo →
+                How it Works →
               </Link>
               <a
                 href="#programs"
@@ -252,13 +291,15 @@ export default function HomePage() {
               style={{ backgroundColor: "#7C6D66" }}
             />
           </div>
-          <Link
-            href="/dashboard/events"
-            className="text-sm font-medium transition-opacity hover:opacity-70"
-            style={{ color: "#7C6D66" }}
-          >
-            Manage all events →
-          </Link>
+          {showEngagement(mode) && (
+            <Link
+              href="/dashboard/events"
+              className="text-sm font-medium transition-opacity hover:opacity-70"
+              style={{ color: "#7C6D66" }}
+            >
+              Manage all events →
+            </Link>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -372,40 +413,93 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── AI Platform Banner ─────────────────────────────── */}
-      <section style={{ backgroundColor: "#240C00" }}>
-        <div className="max-w-6xl mx-auto px-6 py-14 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div>
-            <h2
-              className="text-xl font-bold mb-2"
-              style={{ color: "#F7F2F0" }}
-            >
-              Member Engagement Platform
-            </h2>
-            <p className="text-sm max-w-lg" style={{ color: "#988f8a" }}>
-              Six AI agents working together to send personalized reminders,
-              collect feedback, coordinate volunteers, onboard new members, and
-              re-engage at-risk members — all from one dashboard.
-            </p>
+      {/* ── Feature Banner ─────────────────────────────────── */}
+      {showEngagement(mode) ? (
+        <section style={{ backgroundColor: "#240C00" }}>
+          <div className="max-w-6xl mx-auto px-6 py-14 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+              <h2
+                className="text-xl font-bold mb-2"
+                style={{ color: "#F7F2F0" }}
+              >
+                Member Engagement Platform
+              </h2>
+              <p className="text-sm max-w-lg" style={{ color: "#988f8a" }}>
+                Six AI agents working together to send personalized reminders,
+                collect feedback, coordinate volunteers, onboard new members, and
+                re-engage at-risk members — all from one dashboard.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+              {showRegistration(mode) && (
+                <Link
+                  href="/portal/registration"
+                  className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: "#C8A882", color: "#240C00" }}
+                >
+                  Portal Demo
+                </Link>
+              )}
+              <Link
+                href="/dashboard/events"
+                className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "#F7F2F0", color: "#240C00" }}
+              >
+                Event Dashboard
+              </Link>
+              <Link
+                href="/architecture"
+                className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "rgba(200,168,130,0.15)", color: "#C8A882", border: "1px solid rgba(200,168,130,0.3)" }}
+              >
+                Architecture →
+              </Link>
+            </div>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
-            <Link
-              href="/portal/registration"
-              className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#C8A882", color: "#240C00" }}
-            >
-              Portal Demo
-            </Link>
-            <Link
-              href="/dashboard/events"
-              className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#F7F2F0", color: "#240C00" }}
-            >
-              Event Dashboard
-            </Link>
+        </section>
+      ) : (
+        <section style={{ backgroundColor: "#240C00" }}>
+          <div className="max-w-6xl mx-auto px-6 py-14 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+              <h2
+                className="text-xl font-bold mb-2"
+                style={{ color: "#F7F2F0" }}
+              >
+                Zeffy Registration Platform
+              </h2>
+              <p className="text-sm max-w-lg" style={{ color: "#988f8a" }}>
+                Production-grade event registration powered by Zeffy — embedded
+                directly into Salesforce Experience Cloud via a Lightning Web
+                Component. Real-time webhook confirmation replaces manual
+                spreadsheet tracking.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 flex-shrink-0">
+              <Link
+                href="/portal/registration"
+                className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "#C8A882", color: "#240C00" }}
+              >
+                Try Portal Demo
+              </Link>
+              <Link
+                href="/portal/dashboard"
+                className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "#F7F2F0", color: "#240C00" }}
+              >
+                View Dashboard
+              </Link>
+              <Link
+                href="/architecture"
+                className="inline-flex items-center justify-center rounded-full px-7 py-3 text-sm font-semibold transition-opacity hover:opacity-90"
+                style={{ backgroundColor: "rgba(200,168,130,0.15)", color: "#C8A882", border: "1px solid rgba(200,168,130,0.3)" }}
+              >
+                Architecture →
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* ── Footer ─────────────────────────────────────────── */}
       <footer style={{ backgroundColor: "#1a0900", color: "#988f8a" }}>

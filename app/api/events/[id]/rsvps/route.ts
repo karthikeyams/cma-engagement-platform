@@ -11,10 +11,10 @@ export interface RSVPWithMember extends RSVP {
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: eventId } = params;
+    const { id: eventId } = await params;
 
     const { data: rsvps, error: rsvpError } = await supabaseAdmin
       .from("rsvps")
